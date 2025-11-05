@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Settings</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Appearance</ion-label>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-icon slot="start" name="moon-outline"></ion-icon>
+      <ion-label>
+        <h2>Dark Mode</h2>
+        <p>Switch between light and dark theme</p>
+      </ion-label>
+      <ion-toggle
+        slot="end"
+        [(ngModel)]="darkModeEnabled"
+        (ionChange)="onThemeToggle($event)">
+      </ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <ion-list class="ion-margin-top">
+    <ion-list-header>
+      <ion-label>About</ion-label>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-icon slot="start" name="information-circle-outline"></ion-icon>
+      <ion-label>
+        <h2>Notes App</h2>
+        <p>Version 1.0.0</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon slot="start" name="code-slash-outline"></ion-icon>
+      <ion-label>
+        <h2>Built with</h2>
+        <p>Ionic & Angular</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

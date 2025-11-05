@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(\"src/theme/variables.scss\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

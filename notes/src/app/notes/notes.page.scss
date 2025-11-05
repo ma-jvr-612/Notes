@@ -1,0 +1,117 @@
+.selected {
+  --background: var(--ion-color-light);
+  border-left: 4px solid var(--ion-color-primary);
+}
+
+.note-date {
+  font-size: 0.75rem;
+  color: var(--ion-color-medium);
+  margin-top: 4px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--ion-color-medium);
+
+  ion-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-bottom: 20px;
+  }
+
+  ion-button {
+    max-width: 200px;
+  }
+}
+
+.editor {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.title-item {
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 16px;
+}
+
+.note-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.content-item {
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+  flex: 1;
+}
+
+.note-content {
+  font-size: 1rem;
+  line-height: 1.8;
+  --padding-start: 0;
+  --padding-end: 0;
+  min-height: 300px;
+}
+
+.editor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--ion-color-light);
+  margin-top: 16px;
+
+  p {
+    margin: 0;
+    font-size: 0.85rem;
+  }
+}
+
+// Desktop: show split pane
+@media (min-width: 768px) {
+  ion-split-pane {
+    --side-width: 320px;
+  }
+
+  .mobile-only {
+    display: none;
+  }
+}
+
+// Mobile: hide menu by default, use FAB
+@media (max-width: 767px) {
+  ion-menu {
+    display: none;
+  }
+
+  ion-split-pane {
+    --side-width: 0px;
+  }
+
+  // Show all notes in main content on mobile
+  ion-content#main-content {
+    ion-list {
+      display: block;
+    }
+  }
+}

@@ -1,0 +1,103 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>My Notes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="createNewNote()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (ionInput)="searchNotes($event)"
+      placeholder="Search notes..."
+      animated="true">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-split-pane contentId="main-content">
+    <!-- Notes List -->
+    <ion-menu contentId="main-content" type="overlay">
+      <ion-content>
+        <ion-list>
+          <ion-item
+            *ngFor="let note of filteredNotes"
+            button
+            (click)="selectNote(note)"
+            [class.selected]="selectedNote?.id === note.id"
+            detail="false">
+            <ion-label>
+              <h2>{{ note.title }}</h2>
+              <p>{{ getPreview(note.content) }}</p>
+              <p class="note-date">{{ formatDate(note.updatedAt) }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="filteredNotes.length === 0" lines="none">
+            <ion-label class="ion-text-center">
+              <p>No notes found</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+
+    <!-- Editor -->
+    <ion-content id="main-content" class="ion-padding">
+      <div *ngIf="!selectedNote" class="empty-state">
+        <ion-icon name="document-text-outline" size="large"></ion-icon>
+        <h2>No note selected</h2>
+        <p>Select a note from the list or create a new one</p>
+        <ion-button (click)="createNewNote()" expand="block">
+          <ion-icon slot="start" name="add"></ion-icon>
+          Create Note
+        </ion-button>
+      </div>
+
+      <div *ngIf="selectedNote" class="editor">
+        <ion-item lines="none" class="title-item">
+          <ion-input
+            [(ngModel)]="selectedNote.title"
+            (ionChange)="saveNote()"
+            placeholder="Note title..."
+            class="note-title">
+          </ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="content-item">
+          <ion-textarea
+            [(ngModel)]="selectedNote.content"
+            (ionChange)="saveNote()"
+            placeholder="Start typing your note..."
+            [autoGrow]="true"
+            rows="20"
+            class="note-content">
+          </ion-textarea>
+        </ion-item>
+
+        <div class="editor-footer">
+          <ion-text color="medium">
+            <p>Last saved: {{ formatDate(selectedNote.updatedAt) }}</p>
+          </ion-text>
+          <ion-button color="danger" (click)="deleteNote(selectedNote)">
+            <ion-icon slot="start" name="trash-outline"></ion-icon>
+            Delete
+          </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ion-split-pane>
+
+  <!-- Mobile: Show list by default, toggle menu -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="mobile-only">
+    <ion-fab-button (click)="createNewNote()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
