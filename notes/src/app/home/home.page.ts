@@ -7,6 +7,7 @@ import { SettingsModal } from '../modals/settings/settings.modal';
 import { LoginModal } from '../modals/login/login.modal';
 import { ApiService } from '../services/api.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ConceptComponent } from '../concept/concept.component';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [CommonModule, RouterLink, IonicModule, HttpClientModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomePage implements OnInit {
   constructor(
@@ -27,16 +28,23 @@ export class HomePage implements OnInit {
     // Initialize theme on page load
   }
 
+  async openConcept() {
+    const modal = await this.modalController.create({
+      component: ConceptComponent,
+    });
+    return await modal.present();
+  }
+
   async openSettings() {
     const modal = await this.modalController.create({
-      component: SettingsModal
+      component: SettingsModal,
     });
     return await modal.present();
   }
 
   async openLogin() {
     const modal = await this.modalController.create({
-      component: LoginModal
+      component: LoginModal,
     });
 
     await modal.present();
@@ -55,7 +63,7 @@ export class HomePage implements OnInit {
         },
         error: (error) => {
           console.error('Error registering user:', error);
-        }
+        },
       });
     } else if (role === 'login' && data && data.isLogin) {
       // Login existing user - fetch from D1 database

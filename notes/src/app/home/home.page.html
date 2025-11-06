@@ -21,7 +21,14 @@
     <p style="color: #568f87">
       Your new way of simply managing grocery lists and recipes
     </p>
-    <div style="display: flex; gap: 0.5rem; flex-direction: column">
+    <div
+      style="
+        display: flex;
+        gap: 0.5rem;
+        flex-direction: column;
+        justify-content: center;
+      "
+    >
       <ion-button
         expand="block"
         routerLink="/notes"
@@ -41,14 +48,43 @@
         Create recipes
       </ion-button>
 
+      <div
+        style="
+          height: 0.125rem;
+          background: #568f87;
+          margin: 2rem 8rem;
+          border-radius: 1rem;
+        "
+      ></div>
+
       <ion-button
         expand="block"
         routerLink="/mobile"
         size="large"
-        style="flex-grow: 1; margin-top: 2rem"
+        style="flex-grow: 1"
       >
         Go to mobile
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        size="large"
+        style="flex-grow: 1"
+        fill="clear"
+        (click)="openConcept()"
+      >
+        Check the concept
       </ion-button>
     </div>
   </div>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title
+      style="opacity: 0.25; width: 100%; text-align: center; font-weight: 300"
+    >
+      Matthijs Janssen van Raaij
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

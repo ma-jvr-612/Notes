@@ -55,7 +55,7 @@
   --box-shadow: 0 !important;
 }
 .searchbar-input.sc-ion-searchbar-md {
-  border-radius: 0.25rem !important;
+  border-radius: 5rem !important;
 }
 .item-native {
   background: red !important;
@@ -63,4 +63,10 @@
 .native-wrapper.sc-ion-textarea-md textarea.sc-ion-textarea-md {
   padding-top: 0 !important;
   color: #568f87 !important;
+}
+.footer-md {
+  box-shadow: 0 0 0 transparent !important;
+}
+.modal-wrapper {
+  border-radius: 1rem !important;
 }
