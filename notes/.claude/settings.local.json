@@ -8,7 +8,13 @@
       "Bash(taskkill:*)",
       "Bash(npm install:*)",
       "Bash(npm run build:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(npx wrangler:*)",
+      "Bash(curl:*)",
+      "Bash(if [ -d \"www\" ])",
+      "Bash(then echo \"www directory exists\")",
+      "Bash(else echo \"www directory does not exist\")",
+      "Bash(fi)"
     ],
     "deny": [],
     "ask": []

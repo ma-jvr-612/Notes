@@ -1,11 +1,6 @@
 // Cloudflare Pages Function for user operations
-import type { PagesFunction } from '@cloudflare/workers-types';
 
-interface Env {
-  DB: D1Database;
-}
-
-export const onRequestPost: PagesFunction<Env> = async (context) => {
+export async function onRequestPost(context) {
   const { email, name } = await context.request.json();
 
   try {
@@ -31,7 +26,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
         }
       }
     );
-  } catch (error: any) {
+  } catch (error) {
     return new Response(
       JSON.stringify({
         success: false,
@@ -46,9 +41,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       }
     );
   }
-};
+}
 
-export const onRequestGet: PagesFunction<Env> = async (context) => {
+export async function onRequestGet(context) {
   try {
     const { results } = await context.env.DB.prepare(
       'SELECT * FROM users ORDER BY created_at DESC'
@@ -66,7 +61,7 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
         }
       }
     );
-  } catch (error: any) {
+  } catch (error) {
     return new Response(
       JSON.stringify({
         success: false,
@@ -81,9 +76,9 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
       }
     );
   }
-};
+}
 
-export const onRequestOptions: PagesFunction = async () => {
+export async function onRequestOptions() {
   return new Response(null, {
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -91,4 +86,4 @@ export const onRequestOptions: PagesFunction = async () => {
       'Access-Control-Allow-Headers': 'Content-Type'
     }
   });
-};
+}

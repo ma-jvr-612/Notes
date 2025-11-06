@@ -29,11 +29,11 @@ export class LoginModal implements OnInit {
     this.apiService.getUsers().subscribe({
       next: (response) => {
         console.log('All users from D1:', response);
-        this.users = response.users || [];
+        // this.users = response.users || [];
       },
       error: (error) => {
         console.error('Error loading users:', error);
-      }
+      },
     });
   }
 
@@ -43,10 +43,13 @@ export class LoginModal implements OnInit {
 
   continue() {
     if (this.email && this.name) {
-      this.modalController.dismiss({
-        email: this.email,
-        name: this.name
-      }, 'save');
+      this.modalController.dismiss(
+        {
+          email: this.email,
+          name: this.name,
+        },
+        'save'
+      );
     }
   }
 }

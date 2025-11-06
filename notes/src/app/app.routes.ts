@@ -11,7 +11,13 @@ export const routes: Routes = [
   },
   {
     path: 'blueprints',
-    loadComponent: () => import('./blueprints/blueprints.page').then((m) => m.BlueprintsPage),
+    loadComponent: () =>
+      import('./blueprints/blueprints.page').then((m) => m.BlueprintsPage),
+  },
+  {
+    path: 'mobile',
+    loadComponent: () =>
+      import('./mobile/mobile.component').then((m) => m.MobileComponent),
   },
   {
     path: '',

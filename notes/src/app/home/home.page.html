@@ -16,16 +16,10 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Notes App</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div id="container">
-    <h1 style="color: #568f87">Welcome to Notes App</h1>
+    <h1 style="color: #568f87">Welcome to Groceries</h1>
     <p style="color: #568f87">
-      A simple and elegant note-taking application built with Ionic
+      Your new way of simply managing grocery lists and recipes
     </p>
     <div style="display: flex; gap: 0.5rem; flex-direction: column">
       <ion-button
@@ -45,6 +39,15 @@
         style="flex-grow: 1"
       >
         Create recipes
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        routerLink="/mobile"
+        size="large"
+        style="flex-grow: 1; margin-top: 2rem"
+      >
+        Go to mobile
       </ion-button>
     </div>
   </div>

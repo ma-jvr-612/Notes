@@ -1,0 +1,278 @@
+.selected {
+  --background: var(--ion-color-light);
+  border-left: 4px solid var(--ion-color-primary);
+}
+
+.note-date {
+  font-size: 0.75rem;
+  color: var(--ion-color-medium);
+  margin-top: 4px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  color: var(--ion-color-medium);
+  transform: translateY(8rem);
+
+  ion-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-bottom: 20px;
+  }
+
+  ion-button {
+    max-width: 200px;
+  }
+}
+
+.editor {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.title-item {
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 0.5rem;
+}
+
+.note-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+.content-item {
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+  flex: 1;
+}
+
+.note-content {
+  font-size: 1rem;
+  line-height: 1.8;
+  --padding-start: 0;
+  --padding-end: 0;
+  min-height: 300px;
+}
+
+.editor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--ion-color-light);
+  margin-top: 16px;
+  padding-bottom: 0.5rem;
+
+  p {
+    margin: 0;
+    font-size: 0.85rem;
+  }
+}
+
+.markdown-preview {
+  flex: 1;
+  padding: 1rem;
+  color: #568f87;
+  font-size: 1rem;
+  line-height: 1.8;
+  overflow-y: auto;
+
+  .markdown-h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #568f87;
+    margin: 1rem 0 0.5rem 0;
+    border-bottom: 2px solid #568f87;
+    padding-bottom: 0.25rem;
+  }
+
+  .markdown-h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #568f87;
+    margin: 0.875rem 0 0.5rem 0;
+    border-bottom: 1px solid #568f87;
+    padding-bottom: 0.25rem;
+  }
+
+  .markdown-h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #568f87;
+    margin: 0.75rem 0 0.5rem 0;
+  }
+
+  .markdown-h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #568f87;
+    margin: 0.625rem 0 0.5rem 0;
+  }
+
+  .markdown-h5 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #568f87;
+    margin: 0.5rem 0 0.5rem 0;
+  }
+
+  .markdown-h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #568f87;
+    margin: 0.5rem 0 0.5rem 0;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    gap: 0.75rem;
+
+    ion-checkbox {
+      --size: 20px;
+      --checkbox-background-checked: #568f87;
+      --border-color: #568f87;
+      --border-color-checked: #568f87;
+      margin: 0;
+    }
+
+    span {
+      flex: 1;
+      color: #568f87;
+    }
+  }
+
+  .text-line {
+    margin-bottom: 0.25rem;
+    color: #568f87;
+    white-space: pre-wrap;
+  }
+}
+
+// ===========================
+// LAPTOP/DESKTOP VIEW (1024px+)
+// ===========================
+@media (min-width: 1024px) {
+  ion-split-pane {
+    --side-width: 350px;
+  }
+
+  .mobile-only {
+    display: none !important;
+  }
+
+  // Always show the sidebar
+  ion-menu {
+    display: block !important;
+  }
+
+  .note-title {
+    font-size: 2rem;
+    border-bottom: 1px solid #f5babb;
+    color: #568f87;
+  }
+
+  .note-content {
+    font-size: 1.1rem;
+    line-height: 1.9;
+  }
+
+  .editor {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}
+
+// ===========================
+// TABLET VIEW (768px - 1023px)
+// ===========================
+@media (min-width: 768px) and (max-width: 1023px) {
+  ion-split-pane {
+    --side-width: 300px;
+  }
+
+  .mobile-only {
+    display: none !important;
+  }
+
+  ion-menu {
+    display: block !important;
+  }
+
+  .note-title {
+    font-size: 1.6rem;
+  }
+
+  .note-content {
+    font-size: 1rem;
+  }
+}
+
+// ===========================
+// PHONE/MOBILE VIEW (< 768px)
+// ===========================
+@media (max-width: 767px) {
+  // Hide the split pane menu on mobile
+  ion-menu {
+    display: none !important;
+  }
+
+  ion-split-pane {
+    --side-width: 0px;
+  }
+
+  // Show FAB button for creating notes
+  .mobile-only {
+    display: block;
+  }
+
+  // Mobile: Show list of notes in main content
+  ion-content#main-content {
+    .notes-list-mobile {
+      display: block;
+    }
+  }
+
+  .note-title {
+    font-size: 1.5rem;
+  }
+
+  .note-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .editor {
+    padding: 1rem 0.5rem;
+  }
+
+  .editor-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+
+    ion-button {
+      width: 100%;
+    }
+  }
+}

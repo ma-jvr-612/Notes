@@ -1,0 +1,47 @@
+<ion-header
+  [translucent]="true"
+  style="padding: 0.5rem; border-radius: 0.5rem; box-shadow: none"
+>
+  <ion-toolbar color="primary" style="border-radius: 0.5rem">
+    <ion-title>{{ note?.title || "Untitled Note" }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<div class="markdown-preview">
+  <div *ngFor="let line of previewLines">
+    <h1 *ngIf="line.type === 'h1'" class="markdown-h1">
+      {{ line.text }}
+    </h1>
+    <h2 *ngIf="line.type === 'h2'" class="markdown-h2">
+      {{ line.text }}
+    </h2>
+    <h3 *ngIf="line.type === 'h3'" class="markdown-h3">
+      {{ line.text }}
+    </h3>
+    <h4 *ngIf="line.type === 'h4'" class="markdown-h4">
+      {{ line.text }}
+    </h4>
+    <h5 *ngIf="line.type === 'h5'" class="markdown-h5">
+      {{ line.text }}
+    </h5>
+    <h6 *ngIf="line.type === 'h6'" class="markdown-h6">
+      {{ line.text }}
+    </h6>
+    <div *ngIf="line.type === 'checkbox'" class="checkbox-item">
+      <ion-checkbox
+        [(ngModel)]="line.checked"
+        (ionChange)="onCheckboxToggle(line)"
+        class="markdown-checkbox"
+      ></ion-checkbox>
+      <span>{{ line.text }}</span>
+    </div>
+    <div *ngIf="line.type === 'text'" class="text-line">
+      {{ line.text }}
+    </div>
+  </div>
+</div>
