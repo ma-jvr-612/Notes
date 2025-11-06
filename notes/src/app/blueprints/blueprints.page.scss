@@ -3,7 +3,7 @@
   border-left: 4px solid var(--ion-color-primary);
 }
 
-.note-date {
+.blueprint-date {
   font-size: 0.75rem;
   color: var(--ion-color-medium);
   margin-top: 4px;
@@ -48,10 +48,10 @@
   --padding-start: 0;
   --padding-end: 0;
   --inner-padding-end: 0;
-  margin-bottom: 0.5rem;
+  margin-bottom: 16px;
 }
 
-.note-title {
+.blueprint-title {
   font-size: 1.8rem;
   font-weight: 600;
   --padding-start: 0;
@@ -65,7 +65,7 @@
   flex: 1;
 }
 
-.note-content {
+.blueprint-content {
   font-size: 1rem;
   line-height: 1.8;
   --padding-start: 0;
@@ -186,13 +186,13 @@
     display: block !important;
   }
 
-  .note-title {
+  .blueprint-title {
     font-size: 2rem;
-    border-bottom: 1px solid #f5babb;
+    border-bottom: 1px solid #c5d4e8;
     color: #568f87;
   }
 
-  .note-content {
+  .blueprint-content {
     font-size: 1.1rem;
     line-height: 1.9;
   }
@@ -219,11 +219,11 @@
     display: block !important;
   }
 
-  .note-title {
+  .blueprint-title {
     font-size: 1.6rem;
   }
 
-  .note-content {
+  .blueprint-content {
     font-size: 1rem;
   }
 }
@@ -241,23 +241,23 @@
     --side-width: 0px;
   }
 
-  // Show FAB button for creating notes
+  // Show FAB button for creating blueprints
   .mobile-only {
     display: block;
   }
 
-  // Mobile: Show list of notes in main content
+  // Mobile: Show list of blueprints in main content
   ion-content#main-content {
-    .notes-list-mobile {
+    .blueprints-list-mobile {
       display: block;
     }
   }
 
-  .note-title {
+  .blueprint-title {
     font-size: 1.5rem;
   }
 
-  .note-content {
+  .blueprint-content {
     font-size: 0.95rem;
     line-height: 1.6;
   }

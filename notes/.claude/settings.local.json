@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(cat:*)",
-      "Bash(\"src/theme/variables.scss\")"
+      "Bash(\"src/theme/variables.scss\")",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

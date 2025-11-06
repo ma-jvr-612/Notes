@@ -1,8 +1,12 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
-    <ion-title>
-      Notes App
-    </ion-title>
+<ion-header
+  [translucent]="true"
+  style="padding: 0.5rem; border-radius: 0.5rem; box-shadow: none"
+>
+  <ion-toolbar color="primary" style="border-radius: 0.5rem">
+    <ion-buttons slot="start">
+      <ion-button> <ion-icon name="flower-outline"></ion-icon> </ion-button>
+    </ion-buttons>
+    <ion-title> Grocery lists </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openSettings()" color="light">
         <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
@@ -19,43 +23,29 @@
   </ion-header>
 
   <div id="container">
-    <ion-icon name="document-text" size="large"></ion-icon>
-    <h1>Welcome to Notes App</h1>
-    <p>A simple and elegant note-taking application built with Ionic</p>
+    <h1 style="color: #568f87">Welcome to Notes App</h1>
+    <p style="color: #568f87">
+      A simple and elegant note-taking application built with Ionic
+    </p>
+    <div style="display: flex; gap: 0.5rem; flex-direction: column">
+      <ion-button
+        expand="block"
+        routerLink="/notes"
+        size="large"
+        style="flex-grow: 1"
+      >
+        Create grocery lists
+      </ion-button>
 
-    <ion-button expand="block" routerLink="/notes" size="large">
-      <ion-icon slot="start" name="create"></ion-icon>
-      Start Taking Notes
-    </ion-button>
-
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Features</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-list lines="none">
-          <ion-item>
-            <ion-icon name="checkmark-circle" slot="start" color="success"></ion-icon>
-            <ion-label>Create and edit notes</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="checkmark-circle" slot="start" color="success"></ion-icon>
-            <ion-label>Auto-save functionality</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="checkmark-circle" slot="start" color="success"></ion-icon>
-            <ion-label>Search through notes</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="checkmark-circle" slot="start" color="success"></ion-icon>
-            <ion-label>Local storage persistence</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-icon name="checkmark-circle" slot="start" color="success"></ion-icon>
-            <ion-label>Responsive design</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
+      <ion-button
+        expand="block"
+        routerLink="/blueprints"
+        size="large"
+        fill="outline"
+        style="flex-grow: 1"
+      >
+        Create recipes
+      </ion-button>
+    </div>
   </div>
 </ion-content>

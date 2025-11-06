@@ -1,0 +1,19 @@
+ion-list {
+  padding: 1rem;
+}
+
+ion-item {
+  margin-bottom: 0.5rem;
+  --background: transparent;
+}
+
+ion-label {
+  h2 {
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+}

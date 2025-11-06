@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Select Blueprint</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="none">
+    <ion-item
+      *ngFor="let blueprint of blueprints"
+      button
+      (click)="selectBlueprint(blueprint)"
+      detail="false"
+    >
+      <ion-label
+        style="
+          background: #fff5f2;
+          border: 0.125rem solid #568f87;
+          padding: 0.5rem;
+          border-radius: 0.25rem;
+          color: #568f87;
+        "
+      >
+        <h2 style="font-weight: bold">{{ blueprint.title }}</h2>
+        <p style="color: #568f87">{{ getPreview(blueprint.content) }}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf="blueprints.length === 0" lines="none">
+      <ion-label class="ion-text-center">
+        <p style="color: #568f87">No blueprints available. Create one first!</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
