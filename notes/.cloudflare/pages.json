@@ -1,0 +1,9 @@
+{
+  "build": {
+    "command": "npm install && npm run build",
+    "output": "www"
+  },
+  "deployment": {
+    "compatibility_date": "2025-01-01"
+  }
+}
