@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Login or register</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div
+    style="
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-between;
+    "
+  >
+    <div>
+      <ion-input
+        [(ngModel)]="email"
+        label="E-mail"
+        placeholder="Enter e-mail"
+      ></ion-input>
+      <ion-input
+        [(ngModel)]="name"
+        label="Nickname"
+        placeholder="Enter nickname"
+      ></ion-input>
+
+      <!-- Display all users from database -->
+      <div *ngIf="users.length > 0" style="margin-top: 2rem">
+        <h3 style="color: #568f87">All Users in Database:</h3>
+        <ion-list>
+          <ion-item *ngFor="let user of users">
+            <ion-label>
+              <h2>{{ user.name }}</h2>
+              <p>{{ user.email }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+
+    <div>
+      <ion-button expand="block" fill="outline" (click)="continue()"
+        >Continue</ion-button
+      >
+    </div>
+  </div>
+</ion-content>

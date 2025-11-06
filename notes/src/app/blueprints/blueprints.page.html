@@ -78,14 +78,13 @@
           >
           </ion-input>
           <ion-button
-            slot="end"
-            fill="clear"
             (click)="togglePreviewMode()"
-            style="margin-left: 0.5rem"
+            size="default"
+            shape="round"
           >
             <ion-icon
               slot="icon-only"
-              [name]="isPreviewMode ? 'create-outline' : 'eye-outline'"
+              [name]="isPreviewMode ? 'brush' : 'logo-markdown'"
             ></ion-icon>
           </ion-button>
         </ion-item>

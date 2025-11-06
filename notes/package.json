@@ -11,7 +11,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "ionic:build": "npm run build",
-    "ionic:serve": "npm run start -- --open"
+    "ionic:serve": "npm run start -- --open",
+    "dev": "ng serve --proxy-config proxy.conf.json",
+    "wrangler:dev": "npx wrangler pages dev www --port=8788 --d1=DB=notes-database --compatibility-date=2025-01-06",
+    "preview": "npm run build && npx wrangler pages dev www --port=8788 --d1=DB=notes-database --compatibility-date=2025-01-06"
   },
   "private": true,
   "dependencies": {

@@ -11,6 +11,7 @@ import {
   eyeOutline,
   logoMarkdown,
   brush,
+  close,
 } from 'ionicons/icons';
 
 @Component({
@@ -28,6 +29,7 @@ export class AppComponent {
       eyeOutline,
       logoMarkdown,
       brush,
+      close,
     });
   }
 }

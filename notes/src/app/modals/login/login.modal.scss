@@ -1,0 +1,46 @@
+ion-segment {
+  margin-bottom: 2rem;
+}
+
+.form-section {
+  animation: fadeIn 0.3s ease-in;
+
+  h2 {
+    color: #568f87;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  p {
+    color: #568f87;
+    margin-bottom: 2rem;
+    opacity: 0.8;
+  }
+}
+
+ion-item {
+  --background: transparent;
+  margin-bottom: 1rem;
+}
+
+.button-container {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  ion-button {
+    flex: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
