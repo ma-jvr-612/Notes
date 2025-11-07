@@ -96,6 +96,7 @@
             (ionChange)="saveNote()"
             (click)="onContentChange($event)"
             (keyup)="onContentChange($event)"
+            (keydown)="onTextareaKeydown($event)"
             (ionFocus)="onContentFocus($event)"
             placeholder="Start typing your note"
             [autoGrow]="true"

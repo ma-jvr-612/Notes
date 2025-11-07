@@ -92,6 +92,7 @@
           <ion-textarea
             [(ngModel)]="selectedBlueprint.content"
             (ionChange)="saveBlueprint()"
+            (keydown)="onTextareaKeydown($event)"
             placeholder="Start typing your blueprint"
             [autoGrow]="true"
             rows="20"

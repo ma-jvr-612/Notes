@@ -17,7 +17,8 @@
       "Bash(fi)",
       "Bash(if [ -d \"functions\" ])",
       "Bash(then echo \"functions directory exists\")",
-      "Bash(else echo \"functions directory does not exist\")"
+      "Bash(else echo \"functions directory does not exist\")",
+      "Bash(npx ng build:*)"
     ],
     "deny": [],
     "ask": []

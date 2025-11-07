@@ -311,4 +311,67 @@ export class NotesPage implements OnInit {
       this.saveNote();
     }
   }
+
+  onTextareaKeydown(event: KeyboardEvent) {
+    if (event.key !== 'Enter' || !this.selectedNote) return;
+
+    // Get the native textarea element
+    const ionTextarea = event.target as any;
+    const textarea = ionTextarea.getInputElement ? ionTextarea.getInputElement() : Promise.resolve(event.target);
+
+    textarea.then((nativeTextarea: HTMLTextAreaElement) => {
+      const cursorPos = nativeTextarea.selectionStart;
+      const content = this.selectedNote!.content || '';
+
+      // Find the current line
+      const beforeCursor = content.substring(0, cursorPos);
+      const afterCursor = content.substring(cursorPos);
+      const currentLineStart = beforeCursor.lastIndexOf('\n') + 1;
+      const currentLineEnd = afterCursor.indexOf('\n');
+      const nextLineStart = currentLineEnd === -1 ? content.length : cursorPos + currentLineEnd;
+      const currentLine = content.substring(currentLineStart, cursorPos) +
+                         (currentLineEnd === -1 ? afterCursor : afterCursor.substring(0, currentLineEnd));
+
+      // Check if current line is a checkbox
+      const checkboxMatch = currentLine.match(/^- \[ \] (.*)$/);
+
+      if (checkboxMatch) {
+        event.preventDefault();
+
+        const textAfterCheckbox = checkboxMatch[1];
+
+        if (textAfterCheckbox.trim() === '') {
+          // Empty checkbox - remove it
+          const newContent = content.substring(0, currentLineStart) +
+                            content.substring(nextLineStart);
+          this.selectedNote!.content = newContent;
+
+          // Set cursor position after removal
+          setTimeout(() => {
+            nativeTextarea.setSelectionRange(currentLineStart, currentLineStart);
+          }, 10);
+        } else {
+          // Has text - create new checkbox on next line
+          const cursorPosInLine = cursorPos - currentLineStart;
+          const textBeforeCursor = currentLine.substring(0, cursorPosInLine);
+          const textAfterCursorInLine = currentLine.substring(cursorPosInLine);
+
+          const newContent = content.substring(0, currentLineStart) +
+                            textBeforeCursor + '\n- [ ] ' +
+                            textAfterCursorInLine +
+                            content.substring(nextLineStart);
+
+          this.selectedNote!.content = newContent;
+
+          // Set cursor position after the new checkbox marker
+          const newCursorPos = currentLineStart + textBeforeCursor.length + 7; // +7 for "\n- [ ] "
+          setTimeout(() => {
+            nativeTextarea.setSelectionRange(newCursorPos, newCursorPos);
+          }, 10);
+        }
+
+        this.saveNote();
+      }
+    });
+  }
 }
