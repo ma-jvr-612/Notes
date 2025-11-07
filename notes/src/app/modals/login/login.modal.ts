@@ -34,6 +34,10 @@ export class LoginModal implements OnInit {
     this.isLogin = !this.isLogin;
   }
 
+  forgotPassword() {
+    this.modalController.dismiss(null, 'forgot-password');
+  }
+
   continue() {
     if (this.isLogin) {
       // Login mode - only need email and password

@@ -17,6 +17,7 @@ import {
   logInOutline,
   enterOutline,
   logOutOutline,
+  receiptOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -41,6 +42,7 @@ export class AppComponent {
       logInOutline,
       enterOutline,
       logOutOutline,
+      receiptOutline,
     });
   }
 }

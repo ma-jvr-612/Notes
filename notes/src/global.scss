@@ -52,6 +52,23 @@
   --ion-color-secondary: #fff5f2 !important;
 }
 
+.button-large {
+  --border-radius: 2rem !important;
+  text-transform: none !important;
+}
+.button-medium {
+  --border-radius: 2rem !important;
+  text-transform: none !important;
+}
+.button-small {
+  --border-radius: 2rem !important;
+  text-transform: none !important;
+}
+.button-outline {
+  --border-width: 1px !important;
+  --border-radius: 2rem !important;
+  text-transform: none !important;
+}
 .searchbar-input-container.sc-ion-searchbar-md {
   --box-shadow: 0 !important;
 }

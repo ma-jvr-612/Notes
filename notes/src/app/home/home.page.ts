@@ -10,6 +10,7 @@ import {
 import { ThemeService } from '../services/theme.service';
 import { SettingsModal } from '../modals/settings/settings.modal';
 import { LoginModal } from '../modals/login/login.modal';
+import { ForgotPasswordModal } from '../modals/forgot-password/forgot-password.modal';
 import { ApiService } from '../services/api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ConceptComponent } from '../concept/concept.component';
@@ -121,6 +122,42 @@ export class HomePage implements OnInit {
     return await modal.present();
   }
 
+  async openForgotPassword() {
+    const modal = await this.modalController.create({
+      component: ForgotPasswordModal,
+      cssClass: 'auto-height',
+    });
+
+    await modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+
+    if (role === 'reset' && data) {
+      try {
+        await this.apiService.resetPassword(data.email);
+        await this.showSuccessAlert(
+          'Password Reset Email Sent',
+          'Please check your email for instructions to reset your password.'
+        );
+      } catch (error) {
+        console.error('Error sending password reset email:', error);
+        const errorMessage = this.getFirebaseErrorMessage(error);
+        await this.showErrorAlert('Password Reset Failed', errorMessage);
+      }
+    }
+  }
+
+  async showSuccessAlert(title: string, message: string) {
+    const alert = await this.alertController.create({
+      header: title,
+      message: message,
+      buttons: ['OK'],
+      cssClass: 'success-alert',
+    });
+
+    await alert.present();
+  }
+
   async openLogin() {
     const modal = await this.modalController.create({
       component: LoginModal,
@@ -130,6 +167,12 @@ export class HomePage implements OnInit {
     await modal.present();
 
     const { data, role } = await modal.onWillDismiss();
+
+    if (role === 'forgot-password') {
+      // User clicked "Forgot Password?" - open forgot password modal
+      await this.openForgotPassword();
+      return;
+    }
 
     if (role === 'register' && data && !data.isLogin) {
       // Register new user with Firebase Auth

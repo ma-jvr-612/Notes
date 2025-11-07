@@ -24,6 +24,7 @@
         label="E-mail"
         type="email"
         placeholder="Enter e-mail"
+        (keyup.enter)="continue()"
       ></ion-input>
 
       <ion-input
@@ -31,13 +32,25 @@
         label="Password"
         type="password"
         placeholder="Enter password"
+        (keyup.enter)="continue()"
       ></ion-input>
+
+      <ion-button
+        *ngIf="isLogin"
+        expand="block"
+        fill="clear"
+        (click)="forgotPassword()"
+        style="margin-top: 0.5rem; font-size: 0.9rem"
+      >
+        Forgot Password?
+      </ion-button>
 
       <ion-input
         *ngIf="!isLogin"
         [(ngModel)]="name"
         label="Nickname"
         placeholder="Enter nickname"
+        (keyup.enter)="continue()"
       ></ion-input>
 
       <ion-button

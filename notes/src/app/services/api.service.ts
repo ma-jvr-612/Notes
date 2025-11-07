@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User as FirebaseUser, signOut } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User as FirebaseUser, signOut, sendPasswordResetEmail } from '@angular/fire/auth';
 import { Firestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where, orderBy, addDoc, serverTimestamp } from '@angular/fire/firestore';
 
 export interface User {
@@ -99,6 +99,15 @@ export class ApiService {
 
   getCurrentUser(): FirebaseUser | null {
     return this.auth.currentUser;
+  }
+
+  async resetPassword(email: string): Promise<void> {
+    try {
+      await sendPasswordResetEmail(this.auth, email);
+    } catch (error) {
+      console.error('Error sending password reset email:', error);
+      throw error;
+    }
   }
 
   async getUser(userId: string): Promise<User | null> {
