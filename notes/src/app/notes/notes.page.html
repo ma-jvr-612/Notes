@@ -9,7 +9,7 @@
     <ion-searchbar
       [(ngModel)]="searchTerm"
       (ionInput)="searchNotes($event)"
-      placeholder="Search notes"
+      placeholder="Search grocery lists"
       animated="true"
     />
     <ion-buttons slot="end">
@@ -52,7 +52,7 @@
 
           <ion-item *ngIf="filteredNotes.length === 0" lines="none">
             <ion-label class="ion-text-center">
-              <p>No notes found</p>
+              <p>No grocery lists found</p>
             </ion-label>
           </ion-item>
         </ion-list>
@@ -61,10 +61,10 @@
 
     <ion-content id="main-content">
       <div *ngIf="!selectedNote" class="empty-state">
-        <h2>No note selected</h2>
-        <p>Select a note from the list or create a new one</p>
+        <h2>No grocery list selected</h2>
+        <p>Select a grocery list from the list or create a new one</p>
         <ion-button (click)="createNewNote()" fill="outline">
-          Create Note
+          Create
         </ion-button>
       </div>
 
@@ -147,7 +147,7 @@
           </ion-text>
           <div style="display: flex; gap: 0.5rem">
             <ion-button fill="outline" (click)="openBlueprintSelector()">
-              Add blueprint
+              Add recipe
             </ion-button>
             <ion-button
               color="danger"

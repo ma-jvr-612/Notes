@@ -22,8 +22,7 @@
 
 <ion-content>
   <ion-split-pane contentId="main-content">
-    <!-- Blueprints List -->
-    <ion-menu contentId="main-content" type="overlay">
+    <ion-menu contentId="main-content">
       <ion-content>
         <ion-list lines="none">
           <ion-item
@@ -152,11 +151,4 @@
       </div>
     </ion-content>
   </ion-split-pane>
-
-  <!-- Mobile: Show list by default, toggle menu -->
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="mobile-only">
-    <ion-fab-button (click)="createNewBlueprint()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>

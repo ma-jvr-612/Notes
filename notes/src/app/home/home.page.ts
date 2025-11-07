@@ -1,7 +1,12 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { IonicModule, ModalController, PopoverController, AlertController } from '@ionic/angular';
+import {
+  IonicModule,
+  ModalController,
+  PopoverController,
+  AlertController,
+} from '@ionic/angular';
 import { ThemeService } from '../services/theme.service';
 import { SettingsModal } from '../modals/settings/settings.modal';
 import { LoginModal } from '../modals/login/login.modal';
@@ -69,7 +74,7 @@ export class HomePage implements OnInit {
       header: title,
       message: message,
       buttons: ['OK'],
-      cssClass: 'error-alert'
+      cssClass: 'error-alert',
     });
 
     await alert.present();
@@ -96,7 +101,9 @@ export class HomePage implements OnInit {
       case 'auth/invalid-credential':
         return 'Invalid email or password. Please check your credentials.';
       default:
-        return error?.message || 'An unexpected error occurred. Please try again.';
+        return (
+          error?.message || 'An unexpected error occurred. Please try again.'
+        );
     }
   }
 
@@ -117,6 +124,7 @@ export class HomePage implements OnInit {
   async openLogin() {
     const modal = await this.modalController.create({
       component: LoginModal,
+      cssClass: 'auto-height',
     });
 
     await modal.present();
@@ -126,7 +134,11 @@ export class HomePage implements OnInit {
     if (role === 'register' && data && !data.isLogin) {
       // Register new user with Firebase Auth
       try {
-        const user = await this.apiService.registerUser(data.email, data.password, data.name);
+        const user = await this.apiService.registerUser(
+          data.email,
+          data.password,
+          data.name
+        );
         console.log('User registered successfully:', user);
         // Store user ID in localStorage for future requests
         localStorage.setItem('userId', user.id);

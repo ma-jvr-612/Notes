@@ -49,6 +49,7 @@
   --ion-item-border-color: #fff5f2 !important;
   --padding-top: 0 !important;
   --padding-bottom: 0 !important;
+  --ion-color-secondary: #fff5f2 !important;
 }
 
 .searchbar-input-container.sc-ion-searchbar-md {
@@ -67,6 +68,14 @@
 .footer-md {
   box-shadow: 0 0 0 transparent !important;
 }
-.modal-wrapper {
-  border-radius: 1rem !important;
+ion-modal.auto-height::part(content) {
+  position: relative;
+  display: block;
+  contain: content;
+  height: 60vh;
+}
+ion-modal.auto-height .inner-content {
+  max-height: 80vh;
+  overflow: auto;
+  height: max-content;
 }

@@ -11,7 +11,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   templateUrl: './notes.page.html',
   styleUrls: ['./notes.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule],
 })
 export class NotesPage implements OnInit {
   notes: Note[] = [];
@@ -21,7 +21,12 @@ export class NotesPage implements OnInit {
   private cursorPosition: number = 0;
   isPreviewMode: boolean = false;
   renderedContent: SafeHtml = '';
-  previewLines: Array<{ type: 'checkbox' | 'text' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'; text?: string; checked?: boolean; lineIndex?: number }> = [];
+  previewLines: Array<{
+    type: 'checkbox' | 'text' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+    text?: string;
+    checked?: boolean;
+    lineIndex?: number;
+  }> = [];
 
   constructor(
     private notesService: NotesService,
@@ -85,9 +90,10 @@ export class NotesPage implements OnInit {
     if (query.trim() === '') {
       this.filteredNotes = this.notes;
     } else {
-      this.filteredNotes = this.notes.filter(note =>
-        note.title.toLowerCase().includes(query) ||
-        note.content.toLowerCase().includes(query)
+      this.filteredNotes = this.notes.filter(
+        (note) =>
+          note.title.toLowerCase().includes(query) ||
+          note.content.toLowerCase().includes(query)
       );
     }
   }
@@ -101,11 +107,18 @@ export class NotesPage implements OnInit {
     const diffInDays = Math.floor(diffInMs / 86400000);
 
     if (diffInMinutes < 1) return 'Just now';
-    if (diffInMinutes < 60) return `${diffInMinutes} min${diffInMinutes > 1 ? 's' : ''} ago`;
-    if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-    if (diffInDays < 7) return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+    if (diffInMinutes < 60)
+      return `${diffInMinutes} min${diffInMinutes > 1 ? 's' : ''} ago`;
+    if (diffInHours < 24)
+      return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+    if (diffInDays < 7)
+      return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
 
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
   }
 
   getPreview(content: string): string {
@@ -154,17 +167,22 @@ export class NotesPage implements OnInit {
       if (textarea) return textarea as HTMLTextAreaElement;
     }
     // Fallback to document query
-    return document.querySelector('.note-content textarea') as HTMLTextAreaElement;
+    return document.querySelector(
+      '.note-content textarea'
+    ) as HTMLTextAreaElement;
   }
 
   private insertBlueprintIntoNote(blueprint: any) {
     if (!this.selectedNote) return;
 
+    const blueprintTitle = blueprint.title;
     const blueprintContent = blueprint.content;
     const currentContent = this.selectedNote.content || '';
 
     // Get the textarea element to check cursor position
-    const textarea = document.querySelector('.note-content textarea') as HTMLTextAreaElement;
+    const textarea = document.querySelector(
+      '.note-content textarea'
+    ) as HTMLTextAreaElement;
     let insertPosition = this.cursorPosition;
 
     // If textarea exists and has focus, use its current selection
@@ -176,6 +194,8 @@ export class NotesPage implements OnInit {
     if (insertPosition >= 0 && insertPosition <= currentContent.length) {
       this.selectedNote.content =
         currentContent.substring(0, insertPosition) +
+        `## ${blueprintTitle}` +
+        '\n' +
         blueprintContent +
         currentContent.substring(insertPosition);
     } else {
@@ -245,7 +265,7 @@ export class NotesPage implements OnInit {
           type: 'checkbox',
           text: uncheckedMatch[1],
           checked: false,
-          lineIndex: index
+          lineIndex: index,
         });
         return;
       }
@@ -257,7 +277,7 @@ export class NotesPage implements OnInit {
           type: 'checkbox',
           text: checkedMatch[1],
           checked: true,
-          lineIndex: index
+          lineIndex: index,
         });
         return;
       }
@@ -265,7 +285,7 @@ export class NotesPage implements OnInit {
       // Regular line
       this.previewLines.push({
         type: 'text',
-        text: line || ' '
+        text: line || ' ',
       });
     });
   }
