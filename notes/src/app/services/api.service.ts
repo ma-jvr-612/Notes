@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User as FirebaseUser, signOut, sendPasswordResetEmail } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User as FirebaseUser, signOut, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { Firestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where, orderBy, addDoc, serverTimestamp } from '@angular/fire/firestore';
 
 export interface User {
@@ -106,6 +106,50 @@ export class ApiService {
       await sendPasswordResetEmail(this.auth, email);
     } catch (error) {
       console.error('Error sending password reset email:', error);
+      throw error;
+    }
+  }
+
+  async loginWithGoogle(): Promise<User> {
+    try {
+      const provider = new GoogleAuthProvider();
+      const credential = await signInWithPopup(this.auth, provider);
+
+      // Check if user profile exists in Firestore
+      const userDoc = await getDoc(doc(this.firestore, 'users', credential.user.uid));
+
+      if (userDoc.exists()) {
+        // User exists, return their profile
+        const data = userDoc.data();
+        return {
+          id: credential.user.uid,
+          email: data['email'],
+          name: data['name'],
+          created_at: data['created_at']?.toDate() || new Date(),
+          updated_at: data['updated_at']?.toDate() || new Date()
+        } as User;
+      } else {
+        // New user, create profile in Firestore
+        const name = credential.user.displayName || credential.user.email?.split('@')[0] || 'User';
+        const email = credential.user.email || '';
+
+        await setDoc(doc(this.firestore, 'users', credential.user.uid), {
+          email: email,
+          name: name,
+          created_at: serverTimestamp(),
+          updated_at: serverTimestamp()
+        });
+
+        return {
+          id: credential.user.uid,
+          email: email,
+          name: name,
+          created_at: new Date(),
+          updated_at: new Date()
+        } as User;
+      }
+    } catch (error) {
+      console.error('Error logging in with Google:', error);
       throw error;
     }
   }

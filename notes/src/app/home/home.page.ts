@@ -174,6 +174,24 @@ export class HomePage implements OnInit {
       return;
     }
 
+    if (role === 'google-login') {
+      // User clicked "Continue with Google"
+      try {
+        const user = await this.apiService.loginWithGoogle();
+        console.log('User logged in with Google successfully:', user);
+        localStorage.setItem('userId', user.id);
+        localStorage.setItem('userName', user.name);
+        localStorage.setItem('userEmail', user.email);
+        // Update auth state
+        this.checkAuthState();
+      } catch (error) {
+        console.error('Error logging in with Google:', error);
+        const errorMessage = this.getFirebaseErrorMessage(error);
+        await this.showErrorAlert('Google Login Failed', errorMessage);
+      }
+      return;
+    }
+
     if (role === 'register' && data && !data.isLogin) {
       // Register new user with Firebase Auth
       try {

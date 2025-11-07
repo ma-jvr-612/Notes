@@ -1,46 +1,224 @@
-ion-segment {
-  margin-bottom: 2rem;
+// Header styling
+.header-toolbar {
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  --min-height: 60px;
+}
+
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+
+  .title-icon {
+    font-size: 1.5rem;
+  }
+}
+
+.close-button {
+  --padding-start: 0.5rem;
+  --padding-end: 0.5rem;
+}
+
+// Content styling
+.modal-content {
+  --background: #fafafa;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1rem 0;
+  gap: 2rem;
 }
 
 .form-section {
-  animation: fadeIn 0.3s ease-in;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: fadeIn 0.4s ease-out;
+}
 
-  h2 {
-    color: #568f87;
-    margin-top: 2rem;
-    margin-bottom: 0.5rem;
-    font-size: 1.5rem;
+.input-group {
+  margin-bottom: 0.5rem;
+
+  .custom-input {
+    --background: #ffffff;
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    --border-radius: 12px;
+    --border-color: #e0e0e0;
+    --border-width: 2px;
+    --highlight-color-focused: #568f87;
+    --highlight-color-valid: #568f87;
+    --placeholder-color: #999;
+    --placeholder-opacity: 0.6;
+
+    font-size: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      border-color: #568f87;
+      box-shadow: 0 3px 8px rgba(86, 143, 135, 0.15);
+    }
+
+    &.ion-focused {
+      border-color: #568f87;
+      box-shadow: 0 4px 12px rgba(86, 143, 135, 0.2);
+    }
   }
+}
 
-  p {
-    color: #568f87;
-    margin-bottom: 2rem;
+.forgot-password-button {
+  --color: #568f87;
+  font-size: 0.9rem;
+  text-transform: none;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+
+  &:hover {
     opacity: 0.8;
   }
 }
 
-ion-item {
-  --background: transparent;
-  margin-bottom: 1rem;
-}
+.toggle-mode-button {
+  --color: #568f87;
+  font-size: 0.95rem;
+  text-transform: none;
+  font-weight: 500;
+  margin-top: 1rem;
 
-.button-container {
-  display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-
-  ion-button {
-    flex: 1;
+  &:hover {
+    opacity: 0.8;
   }
 }
 
+.button-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+
+.primary-button {
+  --background: #568f87;
+  --background-hover: #4a7a73;
+  --background-activated: #3d6660;
+  --color: #ffffff;
+  --border-radius: 12px;
+  --box-shadow: 0 4px 12px rgba(86, 143, 135, 0.3);
+
+  height: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    --box-shadow: 0 6px 16px rgba(86, 143, 135, 0.4);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  ion-icon {
+    font-size: 1.2rem;
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+  gap: 1rem;
+  color: #999;
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+  }
+
+  span {
+    padding: 0 0.5rem;
+  }
+}
+
+.google-button {
+  --border-color: #e0e0e0;
+  --border-width: 2px;
+  --border-radius: 12px;
+  --color: #333;
+  --background-hover: #f5f5f5;
+  --background-activated: #eeeeee;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  height: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  ion-icon {
+    font-size: 1.2rem;
+    color: #EA4335;
+  }
+}
+
+// Animations
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+  .login-container {
+    padding: 0.5rem 0;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+
+    .title-icon {
+      font-size: 1.3rem;
+    }
+  }
+
+  .primary-button,
+  .google-button {
+    height: 48px;
+    font-size: 0.95rem;
   }
 }

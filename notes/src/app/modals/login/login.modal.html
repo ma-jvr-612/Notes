@@ -1,71 +1,88 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>{{ isLogin ? 'Login' : 'Register' }}</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary" class="header-toolbar">
+    <ion-title class="modal-title">
+      <ion-icon name="flower-outline" class="title-icon"></ion-icon>
+      {{ isLogin ? 'Welcome Back' : 'Create Account' }}
+    </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="cancel()">
+      <ion-button (click)="cancel()" class="close-button">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div
-    style="
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      justify-content: space-between;
-    "
-  >
-    <div>
-      <ion-input
-        [(ngModel)]="email"
-        label="E-mail"
-        type="email"
-        placeholder="Enter e-mail"
-        (keyup.enter)="continue()"
-      ></ion-input>
+<ion-content class="ion-padding modal-content">
+  <div class="login-container">
+    <div class="form-section">
+      <div class="input-group">
+        <ion-input
+          [(ngModel)]="email"
+          label="E-mail"
+          type="email"
+          placeholder="your@email.com"
+          (keyup.enter)="continue()"
+          class="custom-input"
+          label-placement="floating"
+        ></ion-input>
+      </div>
 
-      <ion-input
-        [(ngModel)]="password"
-        label="Password"
-        type="password"
-        placeholder="Enter password"
-        (keyup.enter)="continue()"
-      ></ion-input>
+      <div class="input-group">
+        <ion-input
+          [(ngModel)]="password"
+          label="Password"
+          type="password"
+          placeholder="••••••••"
+          (keyup.enter)="continue()"
+          class="custom-input"
+          label-placement="floating"
+        ></ion-input>
+      </div>
 
       <ion-button
         *ngIf="isLogin"
         expand="block"
         fill="clear"
         (click)="forgotPassword()"
-        style="margin-top: 0.5rem; font-size: 0.9rem"
+        class="forgot-password-button"
       >
         Forgot Password?
       </ion-button>
 
-      <ion-input
-        *ngIf="!isLogin"
-        [(ngModel)]="name"
-        label="Nickname"
-        placeholder="Enter nickname"
-        (keyup.enter)="continue()"
-      ></ion-input>
+      <div class="input-group" *ngIf="!isLogin">
+        <ion-input
+          [(ngModel)]="name"
+          label="Nickname"
+          placeholder="Your name"
+          (keyup.enter)="continue()"
+          class="custom-input"
+          label-placement="floating"
+        ></ion-input>
+      </div>
 
       <ion-button
         expand="block"
         fill="clear"
         (click)="toggleMode()"
-        style="margin-top: 1rem"
+        class="toggle-mode-button"
       >
         {{ isLogin ? 'Need an account? Register' : 'Already have an account? Login' }}
       </ion-button>
     </div>
 
-    <div>
-      <ion-button expand="block" fill="outline" (click)="continue()">
+    <div class="button-section">
+      <ion-button expand="block" (click)="continue()" class="primary-button">
+        <ion-icon slot="start" [name]="isLogin ? 'log-in-outline' : 'person-add-outline'"></ion-icon>
         {{ isLogin ? 'Login' : 'Register' }}
+      </ion-button>
+
+      <div class="divider">
+        <span>OR</span>
+      </div>
+
+      <ion-button expand="block" fill="outline" (click)="loginWithGoogle()" class="google-button">
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        Continue with Google
       </ion-button>
     </div>
   </div>

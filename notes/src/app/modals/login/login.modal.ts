@@ -38,6 +38,10 @@ export class LoginModal implements OnInit {
     this.modalController.dismiss(null, 'forgot-password');
   }
 
+  loginWithGoogle() {
+    this.modalController.dismiss(null, 'google-login');
+  }
+
   continue() {
     if (this.isLogin) {
       // Login mode - only need email and password
