@@ -4,13 +4,28 @@
 >
   <ion-toolbar color="primary" style="border-radius: 0.5rem">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
+      <ion-back-button
+        defaultHref="/home"
+        class="desktop-back-button"
+      ></ion-back-button>
+      @if (selectedNote) {
+      <ion-back-button
+        (click)="goBackToList()"
+        class="mobile-only"
+      ></ion-back-button>
+      } @else {
+      <ion-back-button
+        defaultHref="/home"
+        class="mobile-only"
+      ></ion-back-button>
+      }
     </ion-buttons>
     <ion-searchbar
       [(ngModel)]="searchTerm"
       (ionInput)="searchNotes($event)"
       placeholder="Search grocery lists"
       animated="true"
+      class="search-bar desktop-search"
     />
     <ion-buttons slot="end">
       <ion-button (click)="createNewNote()">
@@ -59,8 +74,46 @@
       </ion-content>
     </ion-menu>
 
-    <ion-content id="main-content">
-      <div *ngIf="!selectedNote" class="empty-state">
+    <ion-content id="main-content" class="desktop-content">
+      <!-- Mobile List View -->
+      <div class="mobile-list-view">
+        <ion-list lines="none">
+          <ion-item
+            *ngFor="let note of filteredNotes"
+            button
+            (click)="selectNote(note)"
+            detail="false"
+          >
+            <ion-label
+              style="
+                background: #fff5f2;
+                border: 0.125rem solid #568f87;
+                padding: 0.5rem;
+                border-radius: 0.25rem;
+                color: #568f87;
+              "
+            >
+              <h2 style="font-weight: bold">{{ note.title }}</h2>
+              <p style="color: #568f87">{{ getPreview(note.content) }}</p>
+              <p class="note-date" style="color: #064232">
+                {{ formatDate(note.updatedAt) }}
+              </p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="filteredNotes.length === 0" lines="none">
+            <ion-label class="ion-text-center">
+              <p>No grocery lists found</p>
+              <ion-button (click)="createNewNote()" fill="outline">
+                Create your first list
+              </ion-button>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <!-- Desktop Empty State -->
+      <div *ngIf="!selectedNote" class="empty-state desktop-only-content">
         <h2>No grocery list selected</h2>
         <p>Select a grocery list from the list or create a new one</p>
         <ion-button (click)="createNewNote()" fill="outline">
@@ -68,6 +121,7 @@
         </ion-button>
       </div>
 
+      <!-- Editor View (Desktop) or Detail View (Mobile) -->
       <div *ngIf="selectedNote" class="editor">
         <ion-item lines="none" class="title-item">
           <ion-input
@@ -162,11 +216,4 @@
       </div>
     </ion-content>
   </ion-split-pane>
-
-  <!-- Mobile: Show list by default, toggle menu -->
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="mobile-only">
-    <ion-fab-button (click)="createNewNote()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>

@@ -53,6 +53,10 @@ export class BlueprintsPage implements OnInit {
     this.selectedBlueprint = { ...blueprint };
   }
 
+  goBackToList() {
+    this.selectedBlueprint = null;
+  }
+
   async saveBlueprint() {
     if (this.selectedBlueprint) {
       try {

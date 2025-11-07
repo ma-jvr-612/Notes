@@ -169,31 +169,152 @@
   }
 }
 
-ion-split-pane {
-  --side-width: 350px;
+// Mobile list view (hidden on desktop)
+.mobile-list-view {
+  display: none;
 }
 
-.mobile-only {
-  display: none !important;
+// Desktop-only content
+.desktop-only-content {
+  display: block;
 }
 
-// Always show the sidebar
-ion-menu {
-  display: block !important;
+// Mobile/Desktop back buttons
+.mobile-back-button {
+  display: none;
 }
 
-.blueprint-title {
-  font-size: 2rem;
-  border-bottom: 1px solid #c5d4e8;
-  color: #568f87;
+.desktop-back-button {
+  display: block;
 }
 
-.blueprint-content {
-  font-size: 1.1rem;
-  line-height: 1.9;
+// Desktop search bar
+.desktop-search {
+  display: block;
 }
 
-.editor {
-  max-width: 900px;
-  margin: 0 auto;
+// ===========================
+// LAPTOP/DESKTOP VIEW (1024px+)
+// ===========================
+@media (min-width: 1024px) {
+  ion-split-pane {
+    --side-width: 350px;
+  }
+
+  .mobile-only {
+    display: none !important;
+  }
+
+  ion-menu {
+    display: block !important;
+  }
+
+  .blueprint-title {
+    font-size: 2rem;
+    border-bottom: 1px solid #c5d4e8;
+    color: #568f87;
+  }
+
+  .blueprint-content {
+    font-size: 1.1rem;
+    line-height: 1.9;
+  }
+
+  .editor {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}
+
+// ===========================
+// TABLET VIEW (768px - 1023px)
+// ===========================
+@media (min-width: 768px) and (max-width: 1023px) {
+  ion-split-pane {
+    --side-width: 300px;
+  }
+
+  .mobile-only {
+    display: none !important;
+  }
+
+  ion-menu {
+    display: block !important;
+  }
+
+  .blueprint-title {
+    font-size: 1.6rem;
+  }
+
+  .blueprint-content {
+    font-size: 1rem;
+  }
+}
+
+// ===========================
+// PHONE/MOBILE VIEW (< 768px)
+// ===========================
+@media (max-width: 767px) {
+  ion-menu {
+    display: none !important;
+  }
+
+  ion-split-pane {
+    --side-width: 0px;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  .desktop-only-content {
+    display: none !important;
+  }
+
+  .desktop-back-button {
+    display: none !important;
+  }
+
+  .mobile-back-button {
+    display: block !important;
+  }
+
+  // Hide search bar on mobile
+  .desktop-search {
+    display: none !important;
+  }
+
+  .mobile-list-view {
+    display: block;
+    padding: 1rem;
+  }
+
+  .editor ~ .mobile-list-view,
+  ion-content:has(.editor) .mobile-list-view {
+    display: none;
+  }
+
+  .editor {
+    display: flex;
+    padding: 1rem 0.5rem;
+  }
+
+  .blueprint-title {
+    font-size: 1.5rem;
+  }
+
+  .blueprint-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .editor-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+
+    ion-button {
+      width: 100%;
+    }
+  }
 }

@@ -228,6 +228,30 @@
   }
 }
 
+// Mobile list view (hidden on desktop)
+.mobile-list-view {
+  display: none;
+}
+
+// Desktop-only content
+.desktop-only-content {
+  display: block;
+}
+
+// Mobile/Desktop back buttons
+.mobile-back-button {
+  display: none;
+}
+
+.desktop-back-button {
+  display: block;
+}
+
+// Desktop search bar
+.desktop-search {
+  display: block;
+}
+
 // ===========================
 // PHONE/MOBILE VIEW (< 768px)
 // ===========================
@@ -246,11 +270,41 @@
     display: block;
   }
 
-  // Mobile: Show list of notes in main content
-  ion-content#main-content {
-    .notes-list-mobile {
-      display: block;
-    }
+  // Hide desktop-only content on mobile
+  .desktop-only-content {
+    display: none !important;
+  }
+
+  // Mobile back button
+  .desktop-back-button {
+    display: none !important;
+  }
+
+  .mobile-back-button {
+    display: block !important;
+  }
+
+  // Hide search bar on mobile
+  .desktop-search {
+    display: none !important;
+  }
+
+  // Show mobile list view when no note is selected
+  .mobile-list-view {
+    display: block;
+    padding: 1rem;
+  }
+
+  // Hide mobile list view when a note is selected
+  .editor ~ .mobile-list-view,
+  ion-content:has(.editor) .mobile-list-view {
+    display: none;
+  }
+
+  // Hide editor initially, show only when note selected
+  .editor {
+    display: flex;
+    padding: 1rem 0.5rem;
   }
 
   .note-title {
@@ -262,14 +316,17 @@
     line-height: 1.6;
   }
 
-  .editor {
-    padding: 1rem 0.5rem;
-  }
-
   .editor-footer {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+
+    div {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
 
     ion-button {
       width: 100%;

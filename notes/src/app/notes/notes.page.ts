@@ -61,6 +61,10 @@ export class NotesPage implements OnInit {
     this.selectedNote = { ...note };
   }
 
+  goBackToList() {
+    this.selectedNote = null;
+  }
+
   async saveNote() {
     if (this.selectedNote) {
       try {
