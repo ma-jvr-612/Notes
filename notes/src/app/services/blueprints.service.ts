@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ApiService, Blueprint as FirebaseBlueprint } from './api.service';
 
 export interface Blueprint {
   id: string;
@@ -12,67 +13,78 @@ export interface Blueprint {
   providedIn: 'root'
 })
 export class BlueprintsService {
-  private readonly STORAGE_KEY = 'ionic-blueprints';
-  private blueprints: Blueprint[] = [];
+  constructor(private apiService: ApiService) {}
 
-  constructor() {
-    this.loadFromStorage();
-  }
+  async getBlueprints(): Promise<Blueprint[]> {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      throw new Error('User not logged in');
+    }
 
-  private loadFromStorage(): void {
-    const storedBlueprints = localStorage.getItem(this.STORAGE_KEY);
-    if (storedBlueprints) {
-      this.blueprints = JSON.parse(storedBlueprints);
+    try {
+      const firebaseBlueprints = await this.apiService.getBlueprints(userId);
+      // Convert Firebase blueprints to local Blueprint format
+      return firebaseBlueprints.map(blueprint => ({
+        id: blueprint.id,
+        title: blueprint.title,
+        content: blueprint.content,
+        createdAt: blueprint.created_at.toISOString(),
+        updatedAt: blueprint.updated_at.toISOString()
+      })).sort((a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      );
+    } catch (error) {
+      console.error('Error loading blueprints:', error);
+      return [];
     }
   }
 
-  private saveToStorage(): void {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.blueprints));
-  }
-
-  private generateId(): string {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
-  }
-
-  getBlueprints(): Blueprint[] {
-    return [...this.blueprints].sort((a, b) =>
-      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-    );
-  }
-
-  getAllBlueprints(): Blueprint[] {
+  async getAllBlueprints(): Promise<Blueprint[]> {
     return this.getBlueprints();
   }
 
-  getBlueprint(id: string): Blueprint | undefined {
-    return this.blueprints.find(blueprint => blueprint.id === id);
+  async getBlueprint(id: string): Promise<Blueprint | undefined> {
+    const blueprints = await this.getBlueprints();
+    return blueprints.find(blueprint => blueprint.id === id);
   }
 
-  createBlueprint(): Blueprint {
-    const newBlueprint: Blueprint = {
-      id: this.generateId(),
-      title: 'Untitled Blueprint',
-      content: '',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+  async createBlueprint(): Promise<Blueprint> {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      throw new Error('User not logged in');
+    }
 
-    this.blueprints.unshift(newBlueprint);
-    this.saveToStorage();
-    return newBlueprint;
-  }
-
-  updateBlueprint(updatedBlueprint: Blueprint): void {
-    const index = this.blueprints.findIndex(blueprint => blueprint.id === updatedBlueprint.id);
-    if (index !== -1) {
-      updatedBlueprint.updatedAt = new Date().toISOString();
-      this.blueprints[index] = updatedBlueprint;
-      this.saveToStorage();
+    try {
+      const blueprintId = await this.apiService.createBlueprint(userId, 'Untitled Blueprint', '');
+      const newBlueprint: Blueprint = {
+        id: blueprintId,
+        title: 'Untitled Blueprint',
+        content: '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      return newBlueprint;
+    } catch (error) {
+      console.error('Error creating blueprint:', error);
+      throw error;
     }
   }
 
-  deleteBlueprint(id: string): void {
-    this.blueprints = this.blueprints.filter(blueprint => blueprint.id !== id);
-    this.saveToStorage();
+  async updateBlueprint(updatedBlueprint: Blueprint): Promise<void> {
+    try {
+      await this.apiService.updateBlueprint(updatedBlueprint.id, updatedBlueprint.title, updatedBlueprint.content);
+    } catch (error) {
+      console.error('Error updating blueprint:', error);
+      throw error;
+    }
+  }
+
+  async deleteBlueprint(id: string): Promise<void> {
+    try {
+      await this.apiService.deleteBlueprint(id);
+    } catch (error) {
+      console.error('Error deleting blueprint:', error);
+      throw error;
+    }
   }
 }

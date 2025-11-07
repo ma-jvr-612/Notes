@@ -33,34 +33,50 @@ export class NotesPage implements OnInit {
     this.loadNotes();
   }
 
-  loadNotes() {
-    this.notes = this.notesService.getNotes();
-    this.filteredNotes = this.notes;
+  async loadNotes() {
+    try {
+      this.notes = await this.notesService.getNotes();
+      this.filteredNotes = this.notes;
+    } catch (error) {
+      console.error('Error loading notes:', error);
+    }
   }
 
-  createNewNote() {
-    const newNote = this.notesService.createNote();
-    this.loadNotes();
-    this.selectNote(newNote);
+  async createNewNote() {
+    try {
+      const newNote = await this.notesService.createNote();
+      await this.loadNotes();
+      this.selectNote(newNote);
+    } catch (error) {
+      console.error('Error creating note:', error);
+    }
   }
 
   selectNote(note: Note) {
     this.selectedNote = { ...note };
   }
 
-  saveNote() {
+  async saveNote() {
     if (this.selectedNote) {
-      this.notesService.updateNote(this.selectedNote);
-      this.loadNotes();
-      this.selectedNote = { ...this.selectedNote };
+      try {
+        await this.notesService.updateNote(this.selectedNote);
+        await this.loadNotes();
+        this.selectedNote = { ...this.selectedNote };
+      } catch (error) {
+        console.error('Error saving note:', error);
+      }
     }
   }
 
-  deleteNote(note: Note) {
-    this.notesService.deleteNote(note.id);
-    this.loadNotes();
-    if (this.selectedNote?.id === note.id) {
-      this.selectedNote = null;
+  async deleteNote(note: Note) {
+    try {
+      await this.notesService.deleteNote(note.id);
+      await this.loadNotes();
+      if (this.selectedNote?.id === note.id) {
+        this.selectedNote = null;
+      }
+    } catch (error) {
+      console.error('Error deleting note:', error);
     }
   }
 

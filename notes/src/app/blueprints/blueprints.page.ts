@@ -30,34 +30,50 @@ export class BlueprintsPage implements OnInit {
     this.loadBlueprints();
   }
 
-  loadBlueprints() {
-    this.blueprints = this.blueprintsService.getBlueprints();
-    this.filteredBlueprints = this.blueprints;
+  async loadBlueprints() {
+    try {
+      this.blueprints = await this.blueprintsService.getBlueprints();
+      this.filteredBlueprints = this.blueprints;
+    } catch (error) {
+      console.error('Error loading blueprints:', error);
+    }
   }
 
-  createNewBlueprint() {
-    const newBlueprint = this.blueprintsService.createBlueprint();
-    this.loadBlueprints();
-    this.selectBlueprint(newBlueprint);
+  async createNewBlueprint() {
+    try {
+      const newBlueprint = await this.blueprintsService.createBlueprint();
+      await this.loadBlueprints();
+      this.selectBlueprint(newBlueprint);
+    } catch (error) {
+      console.error('Error creating blueprint:', error);
+    }
   }
 
   selectBlueprint(blueprint: Blueprint) {
     this.selectedBlueprint = { ...blueprint };
   }
 
-  saveBlueprint() {
+  async saveBlueprint() {
     if (this.selectedBlueprint) {
-      this.blueprintsService.updateBlueprint(this.selectedBlueprint);
-      this.loadBlueprints();
-      this.selectedBlueprint = { ...this.selectedBlueprint };
+      try {
+        await this.blueprintsService.updateBlueprint(this.selectedBlueprint);
+        await this.loadBlueprints();
+        this.selectedBlueprint = { ...this.selectedBlueprint };
+      } catch (error) {
+        console.error('Error saving blueprint:', error);
+      }
     }
   }
 
-  deleteBlueprint(blueprint: Blueprint) {
-    this.blueprintsService.deleteBlueprint(blueprint.id);
-    this.loadBlueprints();
-    if (this.selectedBlueprint?.id === blueprint.id) {
-      this.selectedBlueprint = null;
+  async deleteBlueprint(blueprint: Blueprint) {
+    try {
+      await this.blueprintsService.deleteBlueprint(blueprint.id);
+      await this.loadBlueprints();
+      if (this.selectedBlueprint?.id === blueprint.id) {
+        this.selectedBlueprint = null;
+      }
+    } catch (error) {
+      console.error('Error deleting blueprint:', error);
     }
   }
 

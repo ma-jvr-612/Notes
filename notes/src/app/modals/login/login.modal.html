@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Login or register</ion-title>
+    <ion-title>{{ isLogin ? 'Login' : 'Register' }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="cancel()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -22,32 +22,38 @@
       <ion-input
         [(ngModel)]="email"
         label="E-mail"
+        type="email"
         placeholder="Enter e-mail"
       ></ion-input>
+
       <ion-input
+        [(ngModel)]="password"
+        label="Password"
+        type="password"
+        placeholder="Enter password"
+      ></ion-input>
+
+      <ion-input
+        *ngIf="!isLogin"
         [(ngModel)]="name"
         label="Nickname"
         placeholder="Enter nickname"
       ></ion-input>
 
-      <!-- Display all users from database -->
-      <div *ngIf="users.length > 0" style="margin-top: 2rem">
-        <h3 style="color: #568f87">All Users in Database:</h3>
-        <ion-list>
-          <ion-item *ngFor="let user of users">
-            <ion-label>
-              <h2>{{ user.name }}</h2>
-              <p>{{ user.email }}</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </div>
+      <ion-button
+        expand="block"
+        fill="clear"
+        (click)="toggleMode()"
+        style="margin-top: 1rem"
+      >
+        {{ isLogin ? 'Need an account? Register' : 'Already have an account? Login' }}
+      </ion-button>
     </div>
 
     <div>
-      <ion-button expand="block" fill="outline" (click)="continue()"
-        >Continue</ion-button
-      >
+      <ion-button expand="block" fill="outline" (click)="continue()">
+        {{ isLogin ? 'Login' : 'Register' }}
+      </ion-button>
     </div>
   </div>
 </ion-content>

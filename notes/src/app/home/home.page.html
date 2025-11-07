@@ -8,9 +8,22 @@
     </ion-buttons>
     <ion-title> Grocery lists </ion-title>
     <ion-buttons slot="end" style="margin-right: 0.5rem">
-      <ion-button fill="outline" (click)="openLogin()">
-        Login or register
+      @if (isLoggedIn) {
+      <ion-button id="user-menu-trigger" fill="outline">
+        {{ userName }}
       </ion-button>
+      <ion-popover trigger="user-menu-trigger" triggerAction="click">
+        <ng-template>
+          <ion-content>
+            <ion-list>
+              <ion-item button (click)="logout()">
+                <ion-label>Logout</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+      }
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -29,6 +42,8 @@
         justify-content: center;
       "
     >
+      @if (isLoggedIn) {
+      <!-- Logged in view - show all buttons -->
       <ion-button
         expand="block"
         routerLink="/notes"
@@ -75,6 +90,27 @@
       >
         Check the concept
       </ion-button>
+      } @else {
+      <!-- Not logged in view - show only login and concept buttons -->
+      <ion-button
+        expand="block"
+        size="large"
+        style="flex-grow: 1"
+        (click)="openLogin()"
+      >
+        Login or register
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        size="large"
+        style="flex-grow: 1"
+        fill="clear"
+        (click)="openConcept()"
+      >
+        Check the concept
+      </ion-button>
+      }
     </div>
   </div>
 </ion-content>

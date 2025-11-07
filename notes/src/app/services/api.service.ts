@@ -1,84 +1,275 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User as FirebaseUser, signOut } from '@angular/fire/auth';
+import { Firestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where, orderBy, addDoc, serverTimestamp } from '@angular/fire/firestore';
 
 export interface User {
-  id: number;
+  id: string;
   email: string;
   name: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface Note {
-  id: number;
-  user_id: number;
+  id: string;
+  user_id: string;
   title: string;
   content: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface Blueprint {
-  id: number;
-  user_id: number;
+  id: string;
+  user_id: string;
   title: string;
   content: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  // This will be your Cloudflare Pages URL
-  // For local development, use: http://localhost:8788
-  // For production, use: https://your-site.pages.dev
-  private apiUrl = '/api';
+  constructor(
+    private auth: Auth,
+    private firestore: Firestore
+  ) {}
 
-  constructor(private http: HttpClient) {}
+  // Authentication Methods
+  async registerUser(email: string, password: string, name: string): Promise<User> {
+    try {
+      const credential = await createUserWithEmailAndPassword(this.auth, email, password);
+      const now = new Date();
+      const user: User = {
+        id: credential.user.uid,
+        email: email,
+        name: name,
+        created_at: now,
+        updated_at: now
+      };
 
-  // User endpoints
-  createUser(email: string, name: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/users`, { email, name });
+      // Store user profile in Firestore
+      await setDoc(doc(this.firestore, 'users', user.id), {
+        email: user.email,
+        name: user.name,
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp()
+      });
+
+      return user;
+    } catch (error) {
+      console.error('Error registering user:', error);
+      throw error;
+    }
   }
 
-  getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/users`);
+  async loginUser(email: string, password: string): Promise<User> {
+    try {
+      const credential = await signInWithEmailAndPassword(this.auth, email, password);
+      const userDoc = await getDoc(doc(this.firestore, 'users', credential.user.uid));
+
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        return {
+          id: credential.user.uid,
+          email: data['email'],
+          name: data['name'],
+          created_at: data['created_at']?.toDate() || new Date(),
+          updated_at: data['updated_at']?.toDate() || new Date()
+        } as User;
+      }
+
+      throw new Error('User profile not found');
+    } catch (error) {
+      console.error('Error logging in:', error);
+      throw error;
+    }
   }
 
-  // Notes endpoints
-  getNotes(userId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/notes/${userId}`);
+  async logoutUser(): Promise<void> {
+    try {
+      await signOut(this.auth);
+    } catch (error) {
+      console.error('Error logging out:', error);
+      throw error;
+    }
   }
 
-  createNote(userId: number, title: string, content: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/notes/${userId}`, { title, content });
+  getCurrentUser(): FirebaseUser | null {
+    return this.auth.currentUser;
   }
 
-  updateNote(noteId: number, title: string, content: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/notes/${noteId}`, { title, content });
+  async getUser(userId: string): Promise<User | null> {
+    try {
+      const userDoc = await getDoc(doc(this.firestore, 'users', userId));
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        return {
+          id: userDoc.id,
+          email: data['email'],
+          name: data['name'],
+          created_at: data['created_at']?.toDate() || new Date(),
+          updated_at: data['updated_at']?.toDate() || new Date()
+        } as User;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error getting user:', error);
+      throw error;
+    }
   }
 
-  deleteNote(noteId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/notes/${noteId}`);
+  async getUsers(): Promise<User[]> {
+    try {
+      const usersCollection = collection(this.firestore, 'users');
+      const q = query(usersCollection, orderBy('created_at', 'desc'));
+      const snapshot = await getDocs(q);
+
+      return snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          email: data['email'],
+          name: data['name'],
+          created_at: data['created_at']?.toDate() || new Date(),
+          updated_at: data['updated_at']?.toDate() || new Date()
+        } as User;
+      });
+    } catch (error) {
+      console.error('Error getting users:', error);
+      throw error;
+    }
   }
 
-  // Blueprints endpoints
-  getBlueprints(userId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/blueprints/${userId}`);
+  // Notes Methods
+  async getNotes(userId: string): Promise<Note[]> {
+    try {
+      const notesCollection = collection(this.firestore, 'notes');
+      const q = query(notesCollection, where('user_id', '==', userId), orderBy('updated_at', 'desc'));
+      const snapshot = await getDocs(q);
+
+      return snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          user_id: data['user_id'],
+          title: data['title'],
+          content: data['content'],
+          created_at: data['created_at']?.toDate() || new Date(),
+          updated_at: data['updated_at']?.toDate() || new Date()
+        } as Note;
+      });
+    } catch (error) {
+      console.error('Error getting notes:', error);
+      throw error;
+    }
   }
 
-  createBlueprint(userId: number, title: string, content: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/blueprints/${userId}`, { title, content });
+  async createNote(userId: string, title: string, content: string): Promise<string> {
+    try {
+      const notesCollection = collection(this.firestore, 'notes');
+      const docRef = await addDoc(notesCollection, {
+        user_id: userId,
+        title: title,
+        content: content,
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp()
+      });
+
+      return docRef.id;
+    } catch (error) {
+      console.error('Error creating note:', error);
+      throw error;
+    }
   }
 
-  updateBlueprint(blueprintId: number, title: string, content: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/blueprints/${blueprintId}`, { title, content });
+  async updateNote(noteId: string, title: string, content: string): Promise<void> {
+    try {
+      const noteRef = doc(this.firestore, 'notes', noteId);
+      await updateDoc(noteRef, {
+        title: title,
+        content: content,
+        updated_at: serverTimestamp()
+      });
+    } catch (error) {
+      console.error('Error updating note:', error);
+      throw error;
+    }
   }
 
-  deleteBlueprint(blueprintId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/blueprints/${blueprintId}`);
+  async deleteNote(noteId: string): Promise<void> {
+    try {
+      await deleteDoc(doc(this.firestore, 'notes', noteId));
+    } catch (error) {
+      console.error('Error deleting note:', error);
+      throw error;
+    }
+  }
+
+  // Blueprints Methods
+  async getBlueprints(userId: string): Promise<Blueprint[]> {
+    try {
+      const blueprintsCollection = collection(this.firestore, 'blueprints');
+      const q = query(blueprintsCollection, where('user_id', '==', userId), orderBy('updated_at', 'desc'));
+      const snapshot = await getDocs(q);
+
+      return snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          user_id: data['user_id'],
+          title: data['title'],
+          content: data['content'],
+          created_at: data['created_at']?.toDate() || new Date(),
+          updated_at: data['updated_at']?.toDate() || new Date()
+        } as Blueprint;
+      });
+    } catch (error) {
+      console.error('Error getting blueprints:', error);
+      throw error;
+    }
+  }
+
+  async createBlueprint(userId: string, title: string, content: string): Promise<string> {
+    try {
+      const blueprintsCollection = collection(this.firestore, 'blueprints');
+      const docRef = await addDoc(blueprintsCollection, {
+        user_id: userId,
+        title: title,
+        content: content,
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp()
+      });
+
+      return docRef.id;
+    } catch (error) {
+      console.error('Error creating blueprint:', error);
+      throw error;
+    }
+  }
+
+  async updateBlueprint(blueprintId: string, title: string, content: string): Promise<void> {
+    try {
+      const blueprintRef = doc(this.firestore, 'blueprints', blueprintId);
+      await updateDoc(blueprintRef, {
+        title: title,
+        content: content,
+        updated_at: serverTimestamp()
+      });
+    } catch (error) {
+      console.error('Error updating blueprint:', error);
+      throw error;
+    }
+  }
+
+  async deleteBlueprint(blueprintId: string): Promise<void> {
+    try {
+      await deleteDoc(doc(this.firestore, 'blueprints', blueprintId));
+    } catch (error) {
+      console.error('Error deleting blueprint:', error);
+      throw error;
+    }
   }
 }

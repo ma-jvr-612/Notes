@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ApiService, Note as FirebaseNote } from './api.service';
 
 export interface Note {
   id: string;
@@ -12,63 +13,74 @@ export interface Note {
   providedIn: 'root'
 })
 export class NotesService {
-  private readonly STORAGE_KEY = 'ionic-notes';
-  private notes: Note[] = [];
+  constructor(private apiService: ApiService) {}
 
-  constructor() {
-    this.loadFromStorage();
-  }
+  async getNotes(): Promise<Note[]> {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      throw new Error('User not logged in');
+    }
 
-  private loadFromStorage(): void {
-    const storedNotes = localStorage.getItem(this.STORAGE_KEY);
-    if (storedNotes) {
-      this.notes = JSON.parse(storedNotes);
+    try {
+      const firebaseNotes = await this.apiService.getNotes(userId);
+      // Convert Firebase notes to local Note format
+      return firebaseNotes.map(note => ({
+        id: note.id,
+        title: note.title,
+        content: note.content,
+        createdAt: note.created_at.toISOString(),
+        updatedAt: note.updated_at.toISOString()
+      })).sort((a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      );
+    } catch (error) {
+      console.error('Error loading notes:', error);
+      return [];
     }
   }
 
-  private saveToStorage(): void {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.notes));
+  async getNote(id: string): Promise<Note | undefined> {
+    const notes = await this.getNotes();
+    return notes.find(note => note.id === id);
   }
 
-  private generateId(): string {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
-  }
+  async createNote(): Promise<Note> {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      throw new Error('User not logged in');
+    }
 
-  getNotes(): Note[] {
-    return [...this.notes].sort((a, b) =>
-      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-    );
-  }
-
-  getNote(id: string): Note | undefined {
-    return this.notes.find(note => note.id === id);
-  }
-
-  createNote(): Note {
-    const newNote: Note = {
-      id: this.generateId(),
-      title: 'Untitled Note',
-      content: '',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-
-    this.notes.unshift(newNote);
-    this.saveToStorage();
-    return newNote;
-  }
-
-  updateNote(updatedNote: Note): void {
-    const index = this.notes.findIndex(note => note.id === updatedNote.id);
-    if (index !== -1) {
-      updatedNote.updatedAt = new Date().toISOString();
-      this.notes[index] = updatedNote;
-      this.saveToStorage();
+    try {
+      const noteId = await this.apiService.createNote(userId, 'Untitled Note', '');
+      const newNote: Note = {
+        id: noteId,
+        title: 'Untitled Note',
+        content: '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      return newNote;
+    } catch (error) {
+      console.error('Error creating note:', error);
+      throw error;
     }
   }
 
-  deleteNote(id: string): void {
-    this.notes = this.notes.filter(note => note.id !== id);
-    this.saveToStorage();
+  async updateNote(updatedNote: Note): Promise<void> {
+    try {
+      await this.apiService.updateNote(updatedNote.id, updatedNote.title, updatedNote.content);
+    } catch (error) {
+      console.error('Error updating note:', error);
+      throw error;
+    }
+  }
+
+  async deleteNote(id: string): Promise<void> {
+    try {
+      await this.apiService.deleteNote(id);
+    } catch (error) {
+      console.error('Error deleting note:', error);
+      throw error;
+    }
   }
 }

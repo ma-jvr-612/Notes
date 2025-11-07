@@ -45,8 +45,12 @@ export class BlueprintSelectorModal implements OnInit {
     addIcons({ close });
   }
 
-  ngOnInit() {
-    this.blueprints = this.blueprintsService.getAllBlueprints();
+  async ngOnInit() {
+    try {
+      this.blueprints = await this.blueprintsService.getAllBlueprints();
+    } catch (error) {
+      console.error('Error loading blueprints:', error);
+    }
   }
 
   dismiss() {

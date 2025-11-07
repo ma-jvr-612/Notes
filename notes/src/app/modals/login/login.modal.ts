@@ -13,8 +13,9 @@ import { ApiService } from '../../services/api.service';
 })
 export class LoginModal implements OnInit {
   email: string = '';
+  password: string = '';
   name: string = '';
-  users: any[] = [];
+  isLogin: boolean = true;
 
   constructor(
     private modalController: ModalController,
@@ -22,34 +23,43 @@ export class LoginModal implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadUsers();
-  }
-
-  loadUsers() {
-    this.apiService.getUsers().subscribe({
-      next: (response) => {
-        console.log('All users from D1:', response);
-        // this.users = response.users || [];
-      },
-      error: (error) => {
-        console.error('Error loading users:', error);
-      },
-    });
+    // No longer need to load all users for display
   }
 
   cancel() {
     this.modalController.dismiss(null, 'cancel');
   }
 
+  toggleMode() {
+    this.isLogin = !this.isLogin;
+  }
+
   continue() {
-    if (this.email && this.name) {
-      this.modalController.dismiss(
-        {
-          email: this.email,
-          name: this.name,
-        },
-        'save'
-      );
+    if (this.isLogin) {
+      // Login mode - only need email and password
+      if (this.email && this.password) {
+        this.modalController.dismiss(
+          {
+            email: this.email,
+            password: this.password,
+            isLogin: true,
+          },
+          'login'
+        );
+      }
+    } else {
+      // Register mode - need email, password, and name
+      if (this.email && this.password && this.name) {
+        this.modalController.dismiss(
+          {
+            email: this.email,
+            password: this.password,
+            name: this.name,
+            isLogin: false,
+          },
+          'register'
+        );
+      }
     }
   }
 }

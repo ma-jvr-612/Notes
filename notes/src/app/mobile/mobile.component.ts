@@ -32,11 +32,17 @@ export class MobileComponent implements OnInit {
     });
     await modal.present();
     await modal.onWillDismiss();
+    // Reload notes after modal closes in case changes were made
+    await this.loadNotes();
   }
 
-  loadNotes() {
-    this.notes = this.notesService.getNotes();
-    this.filteredNotes = this.notes;
+  async loadNotes() {
+    try {
+      this.notes = await this.notesService.getNotes();
+      this.filteredNotes = this.notes;
+    } catch (error) {
+      console.error('Error loading notes:', error);
+    }
   }
 
   getPreview(content: string): string {
